@@ -27,3 +27,6 @@ node_modules/
 node/
 
 *.log
+oauth-authorization-server/spring-authorization-server/src/.DS_Store
+oauth-authorization-server/spring-authorization-server/src/main/.DS_Store
+oauth-authorization-server/spring-authorization-server/src/main/resources/.DS_Store

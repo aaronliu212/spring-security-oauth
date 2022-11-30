@@ -33,7 +33,11 @@ public class AuthorizationServerConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        return http.formLogin(Customizer.withDefaults()).build();
+        return http
+                .formLogin().loginPage("/custom-login")
+                .failureForwardUrl("/custom-login?error=true")
+                .and()
+                .build();
     }
 
     @Bean
