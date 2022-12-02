@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -33,7 +34,7 @@ public class AuthorizationServerConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        return http
+        return http.csrf().disable()
                 .formLogin().loginPage("/custom-login")
                 .failureForwardUrl("/custom-login?error=true")
                 .and()
@@ -52,6 +53,7 @@ public class AuthorizationServerConfig {
           .redirectUri("http://127.0.0.1:8080/authorized")
           .scope(OidcScopes.OPENID)
           .scope("articles.read")
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
           .build();
 
         return new InMemoryRegisteredClientRepository(registeredClient);
@@ -89,7 +91,7 @@ public class AuthorizationServerConfig {
     @Bean
     public ProviderSettings providerSettings() {
         return ProviderSettings.builder()
-          .issuer("http://auth-server:9000")
+          .issuer("http://auth-server:10000/oauth/authorization")
           .build();
     }
 }
